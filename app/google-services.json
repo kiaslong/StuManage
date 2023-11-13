@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "91189807414",
+    "project_id": "stumanage-35f80",
+    "storage_bucket": "stumanage-35f80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91189807414:android:9f8930ce53d040a3208b97",
+        "android_client_info": {
+          "package_name": "com.ppl.stumanage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMAfs4ZQ-f055yuaEDarTt2LJoHG1emf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
