@@ -29,15 +29,19 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         private TextView userPhoneNumberTextView;
         private TextView userStatusTextView;
         private TextView userEmailTextView;
+        private TextView userRoleTextView; // Added TextView for user role
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userNameTextView = itemView.findViewById(R.id.textViewUserName);
             userAgeTextView = itemView.findViewById(R.id.textViewUserAge);
-            userEmailTextView=itemView.findViewById(R.id.textViewUserEmail);
+            userEmailTextView = itemView.findViewById(R.id.textViewUserEmail);
             userPhoneNumberTextView = itemView.findViewById(R.id.textViewUserPhoneNumber);
             userStatusTextView = itemView.findViewById(R.id.textViewUserStatus);
+            userRoleTextView = itemView.findViewById(R.id.textViewUserRole); // Initializing user role TextView
         }
     }
+
 
     // onCreateViewHolder: Inflate the item layout and create a ViewHolder
     @NonNull
@@ -53,11 +57,12 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         SystemUser systemUser = systemUserList.get(position);
 
         // Set data to the views in the ViewHolder
-        holder.userNameTextView.setText(systemUser.getUserName());
-        holder.userEmailTextView.setText(systemUser.getUserEmail());
-        holder.userAgeTextView.setText(String.valueOf(systemUser.getUserAge()));
-        holder.userPhoneNumberTextView.setText(systemUser.getUserPhoneNumber());
-        holder.userStatusTextView.setText((systemUser.getUserStatus()));
+        holder.userNameTextView.setText(systemUser.getName());
+        holder.userEmailTextView.setText(systemUser.getEmail());
+        holder.userAgeTextView.setText(String.valueOf(systemUser.getAge()));
+        holder.userPhoneNumberTextView.setText(systemUser.getPhoneNumber());
+        holder.userRoleTextView.setText(systemUser.getRole());
+        holder.userStatusTextView.setText((systemUser.getStatus()));
 
     }
 

@@ -103,21 +103,28 @@ public class ManageUserFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // Now you can set up the click listener
-        TextView tvViewUsers = requireView().findViewById(R.id.tvViewUsers);
-        tvViewUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the current fragment with ViewUsersFragment
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ViewUsersFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
+        TextView tvViewUsers = view.findViewById(R.id.tvViewUsers);
+        TextView tvAddUsers = view.findViewById(R.id.tvAddUser);
+        tvViewUsers.setOnClickListener(v -> {
+            // Replace the current fragment with ViewUsersFragment
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ViewUsersFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
+        tvAddUsers.setOnClickListener(v -> {
+            // Replace the current fragment with ViewUsersFragment
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new AddUserFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+
     }
 
 }
