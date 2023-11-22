@@ -2,6 +2,7 @@ package com.ppl.stumanage;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +15,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
     private EditText loginEmail, loginPassword;
 
     @Override
@@ -26,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_activity);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
 
@@ -57,6 +63,49 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Login success, handle accordingly
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            if (user != null) {
+                                // Get the current timestamp
+                                long currentTime = System.currentTimeMillis();
+
+                                // Check if loginTimeList field exists
+                                firestore.collection("users").document(user.getUid())
+                                        .get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+                                            if (documentSnapshot.exists()) {
+                                                // The document exists, check if loginTimeList field exists
+                                                if (documentSnapshot.contains("loginTimeList")) {
+                                                    // The field exists, update the array with the new timestamp
+                                                    firestore.collection("users").document(user.getUid())
+                                                            .update("loginTimeList", FieldValue.arrayUnion(currentTime))
+                                                            .addOnSuccessListener(aVoid -> {
+                                                                // Successfully updated login time
+                                                                Log.d("LoginActivity", "Login time updated in Firestore");
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                                // Failed to update login time
+                                                                Log.e("LoginActivity", "Failed to update login time in Firestore: " + e.getMessage());
+                                                            });
+                                                } else {
+                                                    // The field doesn't exist, create the field with the first login time
+                                                    firestore.collection("users").document(user.getUid())
+                                                            .update("loginTimeList", FieldValue.arrayUnion(currentTime))
+                                                            .addOnSuccessListener(aVoid -> {
+                                                                // Successfully created loginTimeList field with login time
+                                                                Log.d("LoginActivity", "loginTimeList field created in Firestore");
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                                // Failed to create loginTimeList field
+                                                                Log.e("LoginActivity", "Failed to create loginTimeList field in Firestore: " + e.getMessage());
+                                                            });
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Failed to get document
+                                            Log.e("LoginActivity", "Failed to get document from Firestore: " + e.getMessage());
+                                        });
+                            }
                         } else {
                             // Login failed, display error message
                             Toast.makeText(LoginActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
@@ -66,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void showForgotPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

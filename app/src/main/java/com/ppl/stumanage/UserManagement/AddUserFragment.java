@@ -2,6 +2,7 @@ package com.ppl.stumanage.UserManagement;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,7 +49,9 @@ public class AddUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_user, container, false);
-
+        if (getActivity() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Create New User");
+        }
         // Initialize Firebase components
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -89,13 +93,35 @@ public class AddUserFragment extends Fragment {
             return;
         }
 
+
+
         // Perform error checking
-        if (TextUtils.isEmpty(email)  || TextUtils.isEmpty(name) ||
+        // Perform error checking
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) ||
                 TextUtils.isEmpty(ageStr) || TextUtils.isEmpty(phoneNumber)) {
-            // Show an error message if any field is empty
-            Toast.makeText(requireContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+
+            // Show an error message on the EditText fields that are empty
+            if (TextUtils.isEmpty(email)) {
+                editTextEmail.setError("Email is required");
+            }
+            if (TextUtils.isEmpty(name)) {
+                editTextName.setError("Name is required");
+            }
+            if (TextUtils.isEmpty(ageStr)) {
+                editTextAge.setError("Age is required");
+            }
+            if (TextUtils.isEmpty(phoneNumber)) {
+                editTextPhoneNumber.setError("Phone number is required");
+            }
+
             return;
         }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmail.setError("Enter a valid email address");
+            return;
+        }
+
+
 
         int age;
         try {
