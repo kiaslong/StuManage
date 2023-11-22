@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +46,10 @@ public class ViewUsersFragment extends Fragment {
         if (getActivity() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("View Users");
         }
+        ProgressBar loadingIndicator = view.findViewById(R.id.loadingIndicator);
+
+        // Initially, set it visible to show loading
+        loadingIndicator.setVisibility(View.VISIBLE);
 
         // Initialize RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -75,9 +81,11 @@ public class ViewUsersFragment extends Fragment {
 
             // Notify the adapter that the data set has changed
             adapter.notifyDataSetChanged();
+            loadingIndicator.setVisibility(View.GONE);
         }).addOnFailureListener(e -> {
             // Handle any errors that may occur during the fetch
             Log.e("ViewUsersFragment", "Error fetching users: " + e.getMessage());
+            loadingIndicator.setVisibility(View.GONE);
         });
 
 

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ppl.stumanage.R;
@@ -61,8 +62,22 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         holder.userEmailTextView.setText(systemUser.getEmail());
         holder.userAgeTextView.setText(String.valueOf(systemUser.getAge()));
         holder.userPhoneNumberTextView.setText(systemUser.getPhoneNumber());
-        holder.userRoleTextView.setText(systemUser.getRole());
-        holder.userStatusTextView.setText((systemUser.getStatus()));
+
+        if (systemUser.getRole().equalsIgnoreCase("Manager")) {
+            holder.userRoleTextView.setText(systemUser.getRole());
+            holder.userRoleTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.teal_200));
+        } else if (systemUser.getRole().equalsIgnoreCase("Employee")) {
+            holder.userRoleTextView.setText(systemUser.getRole());
+            holder.userRoleTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.purple_500));
+        }
+
+        if (systemUser.getStatus().equalsIgnoreCase("Locked")) {
+            holder.userStatusTextView.setText(systemUser.getStatus());
+            holder.userStatusTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+        } else if (systemUser.getStatus().equalsIgnoreCase("Normal")) {
+            holder.userStatusTextView.setText(systemUser.getStatus());
+            holder.userStatusTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
+        }
 
     }
 

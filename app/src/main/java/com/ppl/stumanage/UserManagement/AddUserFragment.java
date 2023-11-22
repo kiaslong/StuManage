@@ -11,14 +11,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import com.ppl.stumanage.R;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,13 +133,15 @@ public class AddUserFragment extends Fragment {
         userData.put("name", name);
         userData.put("age", age);
         userData.put("phoneNumber", phoneNumber);
-        userData.put("status", "locked"); // Adding the "status" field with default value
+        userData.put("status", "Locked"); // Adding the "status" field with default value
 
         userRef.set(userData)
                 .addOnSuccessListener(aVoid -> {
                     // User data added successfully
                     Toast.makeText(requireContext(), "User account created successfully", Toast.LENGTH_SHORT).show();
-                    // Clear the form or navigate to another fragment/activity
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new ViewUsersFragment())
+                            .commit();
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors while adding user data to Firestore

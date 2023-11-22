@@ -19,7 +19,7 @@
             android:layout_width="143dp"
             android:layout_height="158dp"
             android:layout_gravity="center_horizontal"
-            tools:src="@tools:sample/avatars" />
+            android:src="@drawable/default_logo_user" />
 
         <TextView
             android:id="@+id/textViewStatus"
