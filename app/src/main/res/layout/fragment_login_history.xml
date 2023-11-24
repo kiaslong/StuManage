@@ -6,6 +6,13 @@
     android:orientation="vertical"
     tools:context=".UserManagement.LoginHistoryFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_gravity="center"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_login_history"
         android:layout_width="match_parent"
