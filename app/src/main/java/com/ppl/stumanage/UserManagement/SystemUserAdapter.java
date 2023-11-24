@@ -1,9 +1,13 @@
 package com.ppl.stumanage.UserManagement;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -17,10 +21,19 @@ import java.util.List;
 public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.ViewHolder> {
 
     private List<SystemUser> systemUserList = new ArrayList<>();
+    interface UserItemClickListener {
+        void onEditClicked(SystemUser user);
+        void onDeleteClicked(SystemUser user);
+        void onLockClicked(SystemUser user);
+    }
+
+    private UserItemClickListener clickListener;
+
 
     // Constructor to initialize the adapter with a list of SystemUser objects
-    public SystemUserAdapter(List<SystemUser> systemUserList) {
+    public SystemUserAdapter(List<SystemUser> systemUserList ,UserItemClickListener listener ) {
         this.systemUserList = systemUserList;
+        this.clickListener = listener;
     }
 
     // ViewHolder class to hold references to the views for each item in the RecyclerView
@@ -30,7 +43,9 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         private TextView userPhoneNumberTextView;
         private TextView userStatusTextView;
         private TextView userEmailTextView;
-        private TextView userRoleTextView; // Added TextView for user role
+        private TextView userRoleTextView;
+
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,8 +94,49 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
             holder.userStatusTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
         }
 
+
+
+
+        holder.itemView.setOnLongClickListener(v -> {
+            showPopupMenu(v, systemUser);
+            return true; // Consume the long click event
+        });
+
     }
 
+
+    private void showPopupMenu(View anchorView, SystemUser systemUser) {
+        PopupMenu popupMenu = new PopupMenu(anchorView.getContext(), anchorView, Gravity.END);
+
+        // Inflate your menu
+        popupMenu.inflate(R.menu.user_context_menu);
+
+        // Set the title with the user name
+        popupMenu.getMenu().findItem(R.id.userNamePopUp).setTitle(systemUser.getName());
+
+
+
+        popupMenu.getMenu().findItem(R.id.action_lock).setTitle("Lock/Unlock");
+
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            // Handle menu item clicks here
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_edit) {
+                clickListener.onEditClicked(systemUser);
+                return true;
+            } else if (itemId == R.id.action_delete) {
+                clickListener.onDeleteClicked(systemUser);
+                return true;
+            } else if (itemId == R.id.action_lock) {
+                clickListener.onLockClicked(systemUser);
+                return true;
+            }
+            return false;
+        });
+
+        popupMenu.show();
+    }
     // getItemCount: Return the total number of items in the data set
     @Override
     public int getItemCount() {

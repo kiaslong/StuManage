@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".UserManagement.EditUserFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="text"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Role"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp" />
+
+
+            <RadioGroup
+                android:id="@+id/radioGrRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <RadioButton
+                    android:id="@+id/radBtnManager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manager"
+                    android:paddingStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
+
+                <RadioButton
+                    android:id="@+id/radBtnEmployee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employee"
+                    android:paddingStart="8dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
+            </RadioGroup>
+
+            <!-- User Name -->
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="text"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+
+            <!-- User Age -->
+            <EditText
+                android:id="@+id/editAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:inputType="number"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+
+            <!-- User Phone Number -->
+            <EditText
+                android:id="@+id/editPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+
+
+            <!-- Save Changes Button -->
+            <Button
+                android:id="@+id/editBtnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Changes"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
