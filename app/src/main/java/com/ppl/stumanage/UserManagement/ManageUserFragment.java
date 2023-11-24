@@ -109,6 +109,7 @@ public class ManageUserFragment extends Fragment {
         // Now you can set up the click listener
         TextView tvViewUsers = view.findViewById(R.id.tvViewUsers);
         TextView tvAddUsers = view.findViewById(R.id.tvAddUser);
+        TextView tvViewLogin =view.findViewById(R.id.tvViewLoginHistory);
         tvViewUsers.setOnClickListener(v -> {
             // Replace the current fragment with ViewUsersFragment
             requireActivity().getSupportFragmentManager().beginTransaction()
@@ -120,6 +121,12 @@ public class ManageUserFragment extends Fragment {
             // Replace the current fragment with ViewUsersFragment
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AddUserFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+        tvViewLogin.setOnClickListener(v->{
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new LoginHistoryFragment())
                     .addToBackStack(null)
                     .commit();
         });
