@@ -58,6 +58,18 @@
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+
             <!-- User Age -->
             <EditText
                 android:id="@+id/editTextAge"
@@ -86,13 +98,15 @@
 
 
             <!-- Save Changes Button -->
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save Changes"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"/>
+
         </LinearLayout>
+            <Button
+            android:id="@+id/btnSaveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
 </ScrollView>

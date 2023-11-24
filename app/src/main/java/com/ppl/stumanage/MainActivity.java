@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ppl.stumanage.UserManagement.ManageUserFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private boolean checkIfAdmin() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            if(!currentUser.getEmail().equals("admin@gmail.com"))
+                return false;
         return true;
     }
 
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.nav_about) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
         } else if (itemId == R.id.nav_logout) {
-            Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

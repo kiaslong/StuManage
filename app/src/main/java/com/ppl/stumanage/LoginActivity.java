@@ -1,6 +1,7 @@
 package com.ppl.stumanage;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -63,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Login success, handle accordingly
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             if (user != null) {
                                 // Get the current timestamp
