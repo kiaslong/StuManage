@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class LoginHistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private LoginHistoryAdapter adapter;
+     ProgressBar progressBar;
     private List<LoginHistoryModel> loginHistoryList;
 
     public LoginHistoryFragment() {
@@ -47,13 +49,14 @@ public class LoginHistoryFragment extends Fragment {
         setHasOptionsMenu(true);
 
         loginHistoryList = new ArrayList<>();
-        fetchAllUsersForLoginHistory();
+
 
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d("MenuInflate", "onCreateOptionsMenu called");
         super.onCreateOptionsMenu(menu, inflater);
+
         getActivity().getMenuInflater().inflate(R.menu.filter_menu, menu);
     }
 
@@ -61,11 +64,14 @@ public class LoginHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login_history, container, false);
         if (getActivity() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Login History");
         }
-        return inflater.inflate(R.layout.fragment_login_history, container, false);
+        progressBar = view.findViewById(R.id.progress_bar);
+        return view;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -81,47 +87,46 @@ public class LoginHistoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Find RecyclerView from the inflated layout
         recyclerView = view.findViewById(R.id.recycler_view_login_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Initialize and set the adapter
         adapter = new LoginHistoryAdapter(loginHistoryList);
         recyclerView.setAdapter(adapter);
+        fetchAllUsersForLoginHistory();
     }
 
     private void fetchAllUsersForLoginHistory() {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
 
         usersRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            // Clear the login history list before adding new data
             loginHistoryList.clear();
 
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 // Retrieve data for each user document
                 String userName = documentSnapshot.getString("name");
                 String userEmail = documentSnapshot.getString("email");
-                // Assuming 'loginTimeList' is the field containing a list of login times as Long values
                 List<Long> loginTime = (List<Long>) documentSnapshot.get("loginTimeList");
 
-                // Create a LoginHistoryModel object for each login time and add it to the list
                 if (loginTime != null && !loginTime.isEmpty()) {
                     for (Long time : loginTime) {
-                        // Convert Long value to String for login time
                         String loginTimeString = convertLongToDate(time);
                         LoginHistoryModel loginHistory = new LoginHistoryModel(userName, userEmail, loginTimeString);
                         loginHistoryList.add(loginHistory);
                     }
                 }
             }
-            // Notify the adapter that the data set has changed
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
+            progressBar.setVisibility(View.GONE);
         }).addOnFailureListener(e -> {
-            // Handle any errors that may occur during the fetch
             Log.e("LoginHistoryFragment", "Error fetching users for login history: " + e.getMessage());
+            progressBar.setVisibility(View.GONE);
         });
     }
 
