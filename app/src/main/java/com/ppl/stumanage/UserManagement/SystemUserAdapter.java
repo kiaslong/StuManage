@@ -23,7 +23,7 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
     private List<SystemUser> systemUserList = new ArrayList<>();
     interface UserItemClickListener {
         void onEditClicked(SystemUser user);
-        void onDeleteClicked(SystemUser user);
+
         void onLockClicked(SystemUser user);
     }
 
@@ -124,9 +124,6 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
             int itemId = item.getItemId();
             if (itemId == R.id.action_edit) {
                 clickListener.onEditClicked(systemUser);
-                return true;
-            } else if (itemId == R.id.action_delete) {
-                clickListener.onDeleteClicked(systemUser);
                 return true;
             } else if (itemId == R.id.action_lock) {
                 clickListener.onLockClicked(systemUser);

@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.ppl.stumanage.MainActivity;
 import com.ppl.stumanage.R;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.List;
 public class ViewUsersFragment extends Fragment {
     private List<SystemUser> systemUserList = new ArrayList<>();
     private ProgressBar loadingIndicator;
+
     private SystemUserAdapter adapter = new SystemUserAdapter(systemUserList, new SystemUserAdapter.UserItemClickListener() {
         @Override
         public void onEditClicked(SystemUser user) {
@@ -40,10 +44,7 @@ public class ViewUsersFragment extends Fragment {
             replaceFragment(editUserFragment);
         }
 
-        @Override
-        public void onDeleteClicked(SystemUser user) {
-            // Handle delete click event
-        }
+
 
         @Override
         public void onLockClicked(SystemUser user) {
@@ -130,10 +131,12 @@ public class ViewUsersFragment extends Fragment {
                 String userStatus = documentSnapshot.getString("status");
                 String userRole = documentSnapshot.getString("role");
 
+                if(!userEmail.equals("admin@gmail.com")){
                 // Create a SystemUser object and add it to the list
                 SystemUser user = new SystemUser(userId, userEmail, userRole, userName, userAge, userPhoneNumber, userStatus);
                 systemUserList.add(user);
-                Log.d("User", user.toString());
+
+                }
             }
 
             // Notify the adapter that the data set has changed

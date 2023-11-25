@@ -54,7 +54,6 @@ public class LoginHistoryFragment extends Fragment {
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d("MenuInflate", "onCreateOptionsMenu called");
         super.onCreateOptionsMenu(menu, inflater);
 
         getActivity().getMenuInflater().inflate(R.menu.filter_menu, menu);
