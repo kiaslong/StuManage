@@ -12,5 +12,7 @@
 
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
+    <color name="menuBackground">#8692f7</color>
+    <color name="menuText">#FFFFFFFF</color>
 
 </resources>

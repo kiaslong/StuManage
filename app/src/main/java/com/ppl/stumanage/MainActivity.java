@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         // Determine whether the user is an admin
-        boolean isAdmin = checkIfAdmin(); // Implement this method according to your logic
+        boolean isAdmin = checkIfAdmin();
 
         // Get the menu and remove the "User Manage" item if not an admin
         Menu navMenu = navigationView.getMenu();
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                         getSupportFragmentManager().popBackStack();
                     } else {
-                        // No fragments in the back stack, handle back press as needed
+
                         finish();
                     }
                 }

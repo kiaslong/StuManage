@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email (must be similar to your gmail)"
+                android:text="Email (must be similar to gmail)"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp" />

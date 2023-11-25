@@ -56,20 +56,21 @@ public class EditUserFragment extends Fragment {
 
             userRef.get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    // Retrieve user data
+
                     String userEmail = documentSnapshot.getString("email");
                     String userName = documentSnapshot.getString("name");
                     int userAge = documentSnapshot.getLong("age") != null ? documentSnapshot.getLong("age").intValue() : 0;
                     String userPhoneNumber = documentSnapshot.getString("phoneNumber");
                     String userRole = documentSnapshot.getString("role");
 
-                    // Set retrieved user data to EditText and RadioButton
+
                     editTextEmail.setText(userEmail);
+                    editTextEmail.setEnabled(false);
                     editTextName.setText(userName);
                     editTextAge.setText(String.valueOf(userAge));
                     editTextPhoneNumber.setText(userPhoneNumber);
 
-                    // Check the appropriate radio button based on the user's role
+
                     if (userRole != null) {
                         if (userRole.equalsIgnoreCase("Manager")) {
                             radioButtonManager.setChecked(true);
@@ -86,15 +87,14 @@ public class EditUserFragment extends Fragment {
 
         Button saveChangesButton = view.findViewById(R.id.editBtnSave);
         saveChangesButton.setOnClickListener(v -> {
-            // Get the updated values from EditText and RadioButton
-            String updatedEmail = editTextEmail.getText().toString();
+
             String updatedName = editTextName.getText().toString();
             int updatedAge = Integer.parseInt(editTextAge.getText().toString());
             String updatedPhoneNumber = editTextPhoneNumber.getText().toString();
             String updatedRole = radioButtonManager.isChecked() ? "Manager" : "Employee";
 
             // Update user details in Firestore
-            userRef.update("email", updatedEmail,
+            userRef.update(
                             "name", updatedName,
                             "age", updatedAge,
                             "phoneNumber", updatedPhoneNumber,
