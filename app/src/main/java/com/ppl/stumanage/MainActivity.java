@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         mOnBackPressedDispatcher = getOnBackPressedDispatcher();
+
+
+
     }
 
     private boolean checkIfAdmin() {
