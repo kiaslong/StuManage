@@ -18,6 +18,7 @@
             <item
                 android:id="@+id/action_delete_account"
                 android:title="Delete Account"
+
                 app:showAsAction="never" />
         </menu>
     </item>

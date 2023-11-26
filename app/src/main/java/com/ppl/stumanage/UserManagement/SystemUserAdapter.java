@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ppl.stumanage.R;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         private TextView userStatusTextView;
         private TextView userEmailTextView;
         private TextView userRoleTextView;
+        private ImageView userImageView;
 
 
 
@@ -54,7 +57,8 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
             userEmailTextView = itemView.findViewById(R.id.textViewUserEmail);
             userPhoneNumberTextView = itemView.findViewById(R.id.textViewUserPhoneNumber);
             userStatusTextView = itemView.findViewById(R.id.textViewUserStatus);
-            userRoleTextView = itemView.findViewById(R.id.textViewUserRole); // Initializing user role TextView
+            userRoleTextView = itemView.findViewById(R.id.textViewUserRole);
+            userImageView = itemView.findViewById(R.id.imageThumbnail);// Initializing user role TextView
         }
     }
 
@@ -92,6 +96,14 @@ public class SystemUserAdapter extends RecyclerView.Adapter<SystemUserAdapter.Vi
         } else if (systemUser.getStatus().equalsIgnoreCase("Normal")) {
             holder.userStatusTextView.setText(systemUser.getStatus());
             holder.userStatusTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
+        }
+
+        if (systemUser.getImageUrl() != null && !systemUser.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(systemUser.getImageUrl())
+                    .placeholder(R.drawable.default_logo_user)
+                    .error(R.drawable.default_logo_user)
+                    .into(holder.userImageView);
         }
 
 

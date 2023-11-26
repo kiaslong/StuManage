@@ -1,4 +1,5 @@
- package com.ppl.stumanage.UserManagement;
+package com.ppl.stumanage.UserManagement;
+
 public class SystemUser {
     private String userId;
     private String email;
@@ -7,8 +8,9 @@ public class SystemUser {
     private int age;
     private String phoneNumber;
     private String status;
+    private String imageUrl; // New field for image URL
 
-    public SystemUser(String userId, String email, String role, String name, int age, String phoneNumber, String status) {
+    public SystemUser(String userId, String email, String role, String name, int age, String phoneNumber, String status, String imageUrl) {
         this.userId = userId;
         this.email = email;
         this.role = role;
@@ -16,6 +18,7 @@ public class SystemUser {
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.imageUrl = imageUrl; // Initialize the imageUrl field
     }
 
     public String getUserId() {
@@ -74,6 +77,14 @@ public class SystemUser {
         this.status = status;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @Override
     public String toString() {
         return "SystemUser{" +
@@ -84,6 +95,7 @@ public class SystemUser {
                 ", age=" + age +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", status='" + status + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

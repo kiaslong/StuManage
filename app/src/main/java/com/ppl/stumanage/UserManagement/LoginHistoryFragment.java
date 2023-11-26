@@ -22,8 +22,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.ppl.stumanage.R;
-import com.ppl.stumanage.UserManagement.LoginHistoryAdapter;
-import com.ppl.stumanage.UserManagement.LoginHistoryModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,15 +137,16 @@ public class LoginHistoryFragment extends Fragment {
 
     private List<String> getUserNamesFromList(List<LoginHistoryModel> loginHistoryList) {
         List<String> userNames = new ArrayList<>();
-        HashSet<String> uniqueNames = new HashSet<>(); // Using HashSet to store unique names
+        HashSet<String> uniqueNames = new HashSet<>();
 
         for (LoginHistoryModel user : loginHistoryList) {
-            if (uniqueNames.add(user.getUsername())) { // Add returns true if the name is added (i.e., it's unique)
+            if (uniqueNames.add(user.getUsername())) {
                 userNames.add(user.getUsername());
             }
         }
         return userNames;
     }
+
 
     private void filterByUserName(String selectedUserName) {
         List<LoginHistoryModel> filteredList = new ArrayList<>();

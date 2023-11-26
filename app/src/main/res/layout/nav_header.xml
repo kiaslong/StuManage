@@ -10,12 +10,14 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
+        android:id="@+id/imageHeader"
         android:layout_gravity="center_horizontal"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/default_logo_user"/>
 
     <TextView
+        android:id="@+id/headerName"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,6 +26,7 @@
         android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/headerContact"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
