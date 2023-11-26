@@ -9,16 +9,16 @@
         android:id="@+id/logoTDT"
         android:layout_width="500dp"
         android:layout_height="500dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/tdtuLogo" />
+        android:layout_alignParentTop="true"
+        android:src="@drawable/logotdtu" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Copyright TDTU CNTT Phat Trien Ung Dung Di Dong "
+        android:text="Copyright TDTU CNTT Phat Trien Ung Dung Di Dong"
         android:layout_below="@id/logoTDT"
         android:layout_centerHorizontal="true"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textColor="@android:color/black"/>
 
 </RelativeLayout>

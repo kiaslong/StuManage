@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -105,6 +107,7 @@ public class ViewUsersFragment extends Fragment {
         fetchUpdatedUserData();
 
 
+
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -130,10 +133,12 @@ public class ViewUsersFragment extends Fragment {
                 String userPhoneNumber = documentSnapshot.getString("phoneNumber");
                 String userStatus = documentSnapshot.getString("status");
                 String userRole = documentSnapshot.getString("role");
+                String imageUrl=documentSnapshot.getString("profileImageURL");
+
 
                 if(!userEmail.equals("admin@gmail.com")){
                 // Create a SystemUser object and add it to the list
-                SystemUser user = new SystemUser(userId, userEmail, userRole, userName, userAge, userPhoneNumber, userStatus);
+                SystemUser user = new SystemUser(userId, userEmail, userRole, userName, userAge, userPhoneNumber, userStatus,imageUrl);
                 systemUserList.add(user);
 
                 }
