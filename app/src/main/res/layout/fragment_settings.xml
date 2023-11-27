@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Profile Picture -->
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="200dp"
@@ -21,24 +22,23 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/default_logo_user" />
 
+        <!-- User Status -->
         <TextView
             android:id="@+id/textViewStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="25dp"
-            android:text="User Status: Normal"
+            android:text="User Status: Normal" />
 
-            />
-
+        <!-- Edit Profile Picture Button -->
         <Button
             android:id="@+id/btnEditProfilePic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit profile picture"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,18 +46,34 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- User Name -->
+            <!-- Name -->
+            <TextView
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="16sp" />
+
             <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
                 android:inputType="text"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
+
+            <!-- Email -->
+            <TextView
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -65,49 +81,60 @@
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
-            <!-- User Age -->
+            <!-- Age -->
+            <TextView
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
             <EditText
                 android:id="@+id/editTextAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Age"
                 android:inputType="number"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
-            <!-- User Phone Number -->
+            <!-- Phone Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
             <EditText
                 android:id="@+id/editTextPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone Number"
                 android:inputType="phone"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
-
             <!-- Save Changes Button -->
+            <Button
+                android:id="@+id/btnSaveChanges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Changes"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
-            <Button
-            android:id="@+id/btnSaveChanges"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save Changes"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"/>
-
     </LinearLayout>
 </ScrollView>
