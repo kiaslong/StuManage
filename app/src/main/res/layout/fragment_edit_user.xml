@@ -7,14 +7,12 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".UserManagement.AddUserFragment">
+    tools:context=".UserManagement.EditUserFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,28 +20,17 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Email -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Email (must be similar to gmail)"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
-
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="text"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
-
-            <!-- Role -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,15 +39,16 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp" />
 
+
             <RadioGroup
-                android:id="@+id/radioGroupRole"
+                android:id="@+id/radioGrRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <RadioButton
-                    android:id="@+id/radioButtonManager"
+                    android:id="@+id/radBtnManager"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Manager"
@@ -70,7 +58,7 @@
                     android:textColor="@color/black"/>
 
                 <RadioButton
-                    android:id="@+id/radioButtonEmployee"
+                    android:id="@+id/radBtnEmployee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Employee"
@@ -80,76 +68,54 @@
             </RadioGroup>
 
             <!-- User Name -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
-
             <EditText
-                android:id="@+id/editTextName"
+                android:id="@+id/editName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
                 android:inputType="text"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"
-                android:text="Phi Long" />
+                android:textColor="@color/black" />
 
             <!-- User Age -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Age"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
-
             <EditText
-                android:id="@+id/editTextAge"
+                android:id="@+id/editAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Age"
                 android:inputType="number"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"
-                android:text="20" />
+                android:textColor="@color/black" />
 
             <!-- User Phone Number -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Phone Number"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
-
             <EditText
-                android:id="@+id/editTextPhoneNumber"
+                android:id="@+id/editPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone Number"
                 android:inputType="phone"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"
-                android:text="1234567890" />
+                android:textColor="@color/black" />
+
 
             <!-- Save Changes Button -->
             <Button
-                android:id="@+id/btnCreateUser"
+                android:id="@+id/editBtnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create User"
+                android:text="Save Changes"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"/>
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

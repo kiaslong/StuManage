@@ -168,6 +168,7 @@ public class AddUserFragment extends Fragment {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, new ViewUsersFragment())
                             .commit();
+
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors while adding user data to Firestore
