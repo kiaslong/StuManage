@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mOnBackPressedDispatcher = getOnBackPressedDispatcher();
 
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
