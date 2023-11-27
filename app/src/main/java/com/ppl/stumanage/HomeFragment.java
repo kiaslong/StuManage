@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +25,29 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.DatabaseError;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.ppl.stumanage.StudentManagement.Student;
+import com.ppl.stumanage.StudentManagement.StudentDetail;
+import com.ppl.stumanage.StudentManagement.StudentList;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class HomeFragment extends Fragment {
@@ -45,7 +60,12 @@ public class HomeFragment extends Fragment {
     private Button buttonAdd;
     ListView listViewStudent;
     List<Student> studentList;
-    DatabaseReference databaseStudent;
+    private StudentList adapter;
+    private FirebaseFirestore firestore;
+    private CollectionReference studentsCollection;
+    private String Role;
+
+
     EditText editTextSearch;
     Button buttonSortBy;
     public HomeFragment() {
@@ -57,6 +77,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firestore = FirebaseFirestore.getInstance();
+        studentsCollection = firestore.collection("students");
+        studentList = new ArrayList<>();
+        adapter = new StudentList(getActivity(), studentList);
 
     }
 
@@ -69,13 +93,16 @@ public class HomeFragment extends Fragment {
         }
         // Inflate the layout for this fragment
 
-        databaseStudent = FirebaseDatabase.getInstance().getReference("students");
+
 
         buttonAdd= view.findViewById(R.id.buttonAddStudent);
         editTextSearch = view.findViewById(R.id.editTextSearch);
 
+
+
         listViewStudent=  view.findViewById(R.id.listViewStudent);
-        studentList = new ArrayList<>();
+        listViewStudent.setAdapter(adapter);
+
 
         buttonSortBy = view.findViewById(R.id.buttonSortBy);
         buttonSortBy.setOnClickListener(new View.OnClickListener() {
@@ -128,48 +155,72 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Student student = studentList.get(position);
-                showUpdateDialog(student.getStudentId(),student.getStudentName(),student.getStudentGender(),student.getStudentEmail(),student.getStudentCourse());
-                return false;
+
+
+                if (Role.equals("Employee")) {
+
+                    return false;
+                } else {
+                    // For other roles, show the update dialog
+                    showUpdateDialog(student.getStudentId(), student.getStudentName(),
+                            student.getStudentGender(), student.getStudentEmail(), student.getStudentCourse());
+                    return true;
+                }
             }
         });
 
         return view;
     }
 
+    @Override
     public void onStart() {
         super.onStart();
-        //Retrieving data From Firebase
-        databaseStudent.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                studentList.clear();
-                for (DataSnapshot studentSnapshot : dataSnapshot.getChildren() ){
-                    //Create Student Class Object and Returning Value
-                    Student student = studentSnapshot.getValue(Student.class);
-                    studentList.add(student);
 
-                }
-                StudentList adapter = new StudentList(getActivity(), studentList);
-                listViewStudent.setAdapter(adapter);
+        fetchUserRole(userRole -> {
+            Role=userRole;
+
+
+            if (userRole.equals("Admin") || userRole.equals("Manager")) {
+
+                enableAdminActions();
+            } else if (userRole.equals("Employee")) {
+
+                disableEmployeeActions();
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        });
 
+
+        studentsCollection.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                Log.w("listen", "Listen failed.", e);
+                return;
+            }
+
+            if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                studentList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
+                        Student student = doc.toObject(Student.class);
+                        studentList.add(student);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            } else {
+                Log.d("listen", "No such document");
             }
         });
     }
-    private void showAddDialog(){
+    private void showAddDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.add_student,null);
+        final View dialogView = inflater.inflate(R.layout.add_student, null);
         dialogBuilder.setView(dialogView);
-
 
         final EditText editTextName = dialogView.findViewById(R.id.editTextName);
         final EditText editTextEmail = dialogView.findViewById(R.id.editTextEmail);
         final EditText editTextCourse = dialogView.findViewById(R.id.editTextCourse);
-        final Button buttonSubmit  = dialogView.findViewById(R.id.buttonSubmitAdd);
+        final Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmitAdd);
         final RadioGroup radioGroupGender = dialogView.findViewById(R.id.radioGroupGender);
         final RadioButton radioButtonMale = dialogView.findViewById(R.id.radioButtonMale);
         final RadioButton radioButtonFemale = dialogView.findViewById(R.id.radioButtonFemale);
@@ -184,28 +235,46 @@ public class HomeFragment extends Fragment {
                 String name = editTextName.getText().toString().trim();
                 String email = editTextEmail.getText().toString();
                 String course = editTextCourse.getText().toString();
-                String gender = "";
+                String gender;
                 int selectedRadioButtonId = radioGroupGender.getCheckedRadioButtonId();
                 if (selectedRadioButtonId == radioButtonMale.getId()) {
                     gender = "Male";
                 } else if (selectedRadioButtonId == radioButtonFemale.getId()) {
                     gender = "Female";
                 } else {
-                    Toast.makeText(getActivity(),"Choose gender",Toast.LENGTH_LONG).show();
+                    gender = "";
+                    Toast.makeText(getActivity(), "Choose gender", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
-                if(!TextUtils.isEmpty(name)){
-                    String id = databaseStudent.push().getKey();
+                if (!TextUtils.isEmpty(name)) {
+                    Student student = new Student(name, gender, email, course);
+                    studentsCollection.add(student)
+                            .addOnSuccessListener(documentReference -> {
+                                String studentId = documentReference.getId();
+                                student.setStudentId(studentId);
 
-                    Student student = new Student(id,name,gender,email,course);
-                    databaseStudent.child(id).setValue(student);
-                    Toast.makeText(getActivity(),"Success",Toast.LENGTH_LONG).show();
-                }else {
-                    Toast.makeText(getActivity(),"Fail",Toast.LENGTH_LONG).show();
+                                studentsCollection.document(studentId)
+                                        .set(student)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                                            adapter.notifyDataSetChanged();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
+                                        });
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
+                            });
+                } else {
+                    Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
                 }
                 alertDialog.dismiss();
             }
         });
+
+
     }
 
     //Update Student
@@ -258,21 +327,68 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private boolean updateStudent(String id, String name, String gender, String email, String course){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("students").child(id);
-        Student student = new Student(id,name,gender,email,course);
-        databaseReference.setValue(student);
-        Toast.makeText(getActivity(),"Updated Successfully",Toast.LENGTH_LONG).show();
-        return true;
+    private void updateStudent(String documentId, String name, String gender, String email, String course) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("students").document(documentId);
+
+        // Update the student's data in Firestore
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("studentName", name);
+        updatedData.put("studentGender", gender);
+        updatedData.put("studentEmail", email);
+        updatedData.put("studentCourse", course);
+
+        docRef.update(updatedData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_LONG).show();
+                    // Find the student in the list and update its details
+                    for (int i = 0; i < studentList.size(); i++) {
+                        Student currentStudent = studentList.get(i);
+                        if (currentStudent != null && currentStudent.getStudentId() != null && currentStudent.getStudentId().equals(documentId)) {
+                            currentStudent.setStudentName(name);
+                            currentStudent.setStudentGender(gender);
+                            currentStudent.setStudentEmail(email);
+                            currentStudent.setStudentCourse(course);
+                            studentList.set(i, currentStudent);
+                            break;
+                        }
+                    }
+                    // Notify adapter of the dataset change
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getActivity(), "Update failed", Toast.LENGTH_LONG).show();
+                });
     }
 
-    private void deleteStudent(String studentId) {
-        DatabaseReference drStudent = FirebaseDatabase.getInstance().getReference("students").child(studentId);
+    private void deleteStudent(String documentId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("students").document(documentId);
 
-        drStudent.removeValue();
-
-        Toast.makeText(getActivity(),"Student is deleted",Toast.LENGTH_LONG).show();
+        docRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "Student is deleted", Toast.LENGTH_LONG).show();
+                        for (int i = 0; i < studentList.size(); i++) {
+                            if (studentList.get(i).getStudentId().equals(documentId)) {
+                                studentList.remove(i);
+                                break;
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Deletion failed", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
+
 
     private void performSearch(String searchKeyword) {
         List<Student> searchResults = new ArrayList<>();
@@ -336,6 +452,44 @@ public class HomeFragment extends Fragment {
         listViewStudent.setAdapter(adapter);
     }
 
+    private interface UserRoleCallback {
+        void onUserRoleFetched(String userRole);
+    }
 
+    private void fetchUserRole(UserRoleCallback callback) {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            db.collection("users").document(currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            // Get the user's role
+                            String userRole = documentSnapshot.getString("role");
+                            if (userRole != null) {
+                                callback.onUserRoleFetched(userRole); // Pass the user role via callback
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle failure to fetch user role
+                    });
+        }
+    }
+
+    private void enableAdminActions() {
+
+        buttonAdd.setVisibility(View.VISIBLE);
+
+    }
+
+
+    private void disableEmployeeActions() {
+
+        buttonAdd.setVisibility(View.GONE);
+
+    }
 
 }
